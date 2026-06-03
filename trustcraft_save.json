@@ -1,0 +1,50 @@
+{
+  "knowledge_xp": 583,
+  "trust_score": 0,
+  "reputation": 0,
+  "achievements": [
+    "source_hunter",
+    "truth_seeker",
+    "evidence_master"
+  ],
+  "quests_done": [
+    "watchtower",
+    "library_quest",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path",
+    "forest_path"
+  ],
+  "questions_answered": 0,
+  "visited_locs": [
+    "library"
+  ],
+  "answers": [],
+  "scores": {
+    "literacy": 0,
+    "trust": 0,
+    "verification": 0,
+    "hallucination": 0,
+    "critical": 0
+  },
+  "forest_penalty": 195,
+  "hallucinations_rejected": 2,
+  "calibration_done": false,
+  "audio_on": true,
+  "cm_history": {
+    "tp": 3,
+    "fp": 3,
+    "fn": 4,
+    "tn": 4
+  }
+}

@@ -1,0 +1,22 @@
+
+.hero-version{
+font-family:"Inter Tight",sans-serif;
+font-size:.72rem;
+font-weight:600;
+letter-spacing:.18em;
+text-transform:uppercase;
+color:rgba(245,236,215,.55);
+margin-left:12px;
+}
+
+
+@keyframes trustFloat{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0px);}
+}
+
+.hero-scene-card{
+animation:trustFloat 6s ease-in-out infinite;
+}
+

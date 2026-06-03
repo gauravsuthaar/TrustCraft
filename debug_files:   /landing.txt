@@ -1,0 +1,98 @@
+def render_native_landing():
+    """Premium landing page with smooth animations."""
+    st.markdown(landing_hero_html(), unsafe_allow_html=True)
+    
+    st.markdown('<div class="world-section"></div>', unsafe_allow_html=True)
+    st.markdown('''
+    <section id="world-target" class="stage-overview" style="max-width:1200px;margin:0 auto;padding:2rem 0">
+      <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.9);margin-bottom:1rem">World</p>
+      <h2 style="font-family:'Inter Tight',sans-serif;font-size:2.6rem;font-weight:700;letter-spacing:-0.02em;color:#F5ECD7;margin-bottom:0.75rem">Six learning zones. One mission.</h2>
+      <p style="font-size:1.05rem;color:rgba(245,236,215,0.72);margin-bottom:2rem;max-width:680px">Each zone introduces new challenges that strengthen reasoning, source evaluation, fact verification, and informed decision making.</p>
+    </section>
+    ''', unsafe_allow_html=True)
+    
+    cols = st.columns(3)
+    for i, dest in enumerate(DESTINATIONS):
+        icon_url = get_avatar_url(dest['loc'], 96)
+        with cols[i % 3]:
+            st.markdown(f'''
+            <div class="feature-card">
+              <div class="feature-icon"><img src="{icon_url}" alt="{dest['title']} avatar" /></div>
+              <p class="feature-label">{dest['time']}</p>
+              <h3>{dest['title']}</h3>
+              <p>{dest['desc']}</p>
+              <button class="feature-cta" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">Enter {dest['title'].split()[0]}</button>
+            </div>
+            ''', unsafe_allow_html=True)
+            if st.button(f"Go {dest['title'].split()[0]}", key=f"land_{dest['loc']}", use_container_width=True):
+                enter_game(dest['loc'])
+                st.rerun()
+
+    st.markdown('''
+    <section id="characters-target" style="max-width:1200px;margin:3rem auto 0;padding:2rem 0">
+      <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.9);margin-bottom:1rem">Characters</p>
+      <h2 style="font-family:'Inter Tight',sans-serif;font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;color:#F5ECD7;margin-bottom:2rem">Meet the villagers</h2>
+    </section>
+    ''', unsafe_allow_html=True)
+    
+    cols = st.columns(3)
+    for i, key in enumerate(["golem", "librarian", "villager"]):
+        c = CHARACTERS[key]
+        avatar_url = get_avatar_url(c['name'].split()[0].lower(), 120)
+        with cols[i]:
+            st.markdown(f'''
+            <div class="character-card">
+              <div class="character-avatar"><img src="{avatar_url}" alt="{c['name']} avatar" /></div>
+              <div class="character-body">
+                <span style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,236,215,0.42);margin-bottom:0.65rem">{c['rarity']}</span>
+                <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.3rem;color:var(--gold);margin:0 0 0.45rem">{c['name']}</h3>
+                <p style="font-size:0.9rem;color:rgba(245,236,215,0.72);line-height:1.7;margin-bottom:1rem">{c['description']}</p>
+                <div style="font-size:0.85rem;color:rgba(245,236,215,0.55);">Trust {c['trust']}%</div>
+              </div>
+            </div>
+            ''', unsafe_allow_html=True)
+
+    st.markdown('''
+    <div style="text-align:center;padding:3rem 1rem">
+      <p style="font-size:0.75rem;letter-spacing:0.08em;color:rgba(245,236,215,0.35)">Designed & Developed by Gaurav Suthar</p>
+    </div>
+    <script>
+      function startJourney() {
+        document.querySelector('#world-target')?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+      function scrollToSection(id) {
+        document.querySelector('#' + id)?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    </script>
+    ''', unsafe_allow_html=True)
+
+GLOBAL_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+
+/* Hide all Streamlit chrome */
+#MainMenu, footer, header, .stDeployButton, [data-testid="stToolbar"],
+[data-testid="stDecoration"], [data-testid="stStatusWidget"],
+div[data-testid="collapsedControl"] { display:none!important; visibility:hidden!important; }
+
+.stApp {
+  background:
+    radial-gradient(circle at 16% 10%, rgba(232,201,125,0.12), transparent 18%),
+    radial-gradient(circle at 82% 8%, rgba(242,166,200,0.14), transparent 20%),
+    linear-gradient(180deg, #07070b 0%, #071418 40%, #050505 100%)!important;
+  font-family:'Inter',sans-serif!important;
+  color:#F5ECD7!important;
+  overflow-x:hidden;
+}
+
+.block-container { padding:0!important; max-width:100%!important; }
+section[data-testid="stSidebar"] { display:none!important; }
+[data-testid="stAppViewContainer"] > section { padding:0; max-width:100%; margin:0 auto; }
+
+/* Premium typography */
+:root {
+  --gold:#E8C97D;
+  --cream:#F5ECD7;

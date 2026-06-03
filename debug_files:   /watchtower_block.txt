@@ -1,0 +1,79 @@
+    st.markdown(f"""
+    <div style="
+    max-width:1100px;
+    margin:2rem auto;
+    padding:2.5rem;
+    border-radius:36px;
+    background:
+    radial-gradient(circle at top left, rgba(232,201,125,.15), transparent 35%),
+    rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    backdrop-filter:blur(40px);
+    -webkit-backdrop-filter:blur(40px);
+    box-shadow:0 30px 100px rgba(0,0,0,.35);
+    ">
+
+    <div style="letter-spacing:.18em;color:#E8C97D;font-size:.8rem;text-transform:uppercase;">
+    Calibration Analytics
+    </div>
+
+    <h1 style="color:#F5ECD7;font-size:4rem;margin:.5rem 0;">
+    {st.session_state.get("trust_score",50)}%
+    </h1>
+
+    <p style="color:rgba(245,236,215,.75);">
+    Confidence Alignment Score
+    </p>
+
+    <div style="
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:2rem;
+    ">
+
+        <div style="padding:1.5rem;border-radius:24px;background:rgba(255,255,255,.05);">
+            <h3 style="color:#F5ECD7;">Overconfident</h3>
+            <p style="color:rgba(245,236,215,.65);">
+            High confidence with weak evidence.
+            </p>
+        </div>
+
+        <div style="padding:1.5rem;border-radius:24px;background:rgba(255,255,255,.05);">
+            <h3 style="color:#F5ECD7;">Balanced</h3>
+            <p style="color:rgba(245,236,215,.65);">
+            Confidence matches reality.
+            </p>
+        </div>
+
+        <div style="padding:1.5rem;border-radius:24px;background:rgba(255,255,255,.05);">
+            <h3 style="color:#F5ECD7;">Underconfident</h3>
+            <p style="color:rgba(245,236,215,.65);">
+            Correct more often than expected.
+            </p>
+        </div>
+
+    </div>
+
+    <div style="
+    margin-top:2rem;
+    padding:1.5rem;
+    border-radius:24px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    ">
+
+    <h3 style="color:#F5ECD7;">
+    Confidence Insight
+    </h3>
+
+    <p style="color:rgba(245,236,215,.75);line-height:1.8;">
+    Strong decision makers are not always highly confident.
+    They understand uncertainty and adjust confidence based on evidence quality.
+    Calibration is the skill of matching belief strength to reality.
+    </p>
+
+    </div>
+
+    </div>
+    """, unsafe_allow_html=True)

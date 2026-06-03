@@ -1,0 +1,103 @@
+def landing_hero_html() -> str:
+    avatar_url = get_avatar_url('trustcraft', 160)
+    return f"""
+    <div class="hero-stage">
+      <div class="hero-particles">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="hero-topbar">TrustCraft</div>
+      <div class="hero-panel">
+        <div class="hero-copy">
+          <span class="hero-chip">Critical Thinking Platform</span>
+          <h1>Know when AI is right. Know when it is wrong.</h1>
+          <p>As artificial intelligence becomes part of everyday life the ability to verify information is becoming a critical skill. TrustCraft transforms AI trust and verification into an interactive learning experience helping users identify hallucinations evaluate evidence and make informed decisions with confidence.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">Start the journey</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">Visit locations</button>
+          </div>
+          <div class="hero-meta-row">
+            <div class="hero-meta-card"><span>6 regions</span><strong>AI Trust Skills</strong></div>
+            <div class="hero-meta-card"><span>5 guides</span><strong>Evidence Based Decisions</strong></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-scene">
+            <div class="hero-glow-pool"></div>
+            <div class="hero-lantern"></div>
+            <div class="hero-tree"></div>
+            <div class="hero-scene-card">
+              <img class="hero-scene-avatar" src="{avatar_url}" alt="TrustCraft avatar" />
+              <div>
+                <p class="hero-banner-title">Hallucination Detection Lab</p>
+                <p class="hero-banner-text">Discover how AI systems can generate false information with confidence and learn the techniques used to detect and challenge unreliable outputs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-footer">
+        <button class="hero-pill" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">AI Literacy</button>
+        <button class="hero-pill" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">Trust & Verification</button>
+        <button class="hero-pill" onclick="document.getElementById('characters-target')?.scrollIntoView({{behavior:'smooth'}})">Critical Thinking</button>
+      </div>
+    </div>"""
+
+
+def render_native_landing():
+    """Premium landing page with smooth animations."""
+    st.markdown(landing_hero_html(), unsafe_allow_html=True)
+    
+    st.markdown('<div class="world-section"></div>', unsafe_allow_html=True)
+    st.markdown('''
+    <section id="world-target" class="stage-overview" style="max-width:1200px;margin:0 auto;padding:2rem 0">
+      <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.9);margin-bottom:1rem">World</p>
+      <h2 style="font-family:'Inter Tight',sans-serif;font-size:2.6rem;font-weight:700;letter-spacing:-0.02em;color:#F5ECD7;margin-bottom:0.75rem">Six learning zones. One mission.</h2>
+      <p style="font-size:1.05rem;color:rgba(245,236,215,0.72);margin-bottom:2rem;max-width:680px">Each zone introduces new challenges that strengthen reasoning, source evaluation, fact verification, and informed decision making.</p>
+    </section>
+    ''', unsafe_allow_html=True)
+    
+    cols = st.columns(3)
+    for i, dest in enumerate(DESTINATIONS):
+        icon_url = get_avatar_url(dest['loc'], 96)
+        with cols[i % 3]:
+            st.markdown(f'''
+            <div class="feature-card">
+              <div class="feature-icon"><img src="{icon_url}" alt="{dest['title']} avatar" /></div>
+              <p class="feature-label">{dest['time']}</p>
+              <h3>{dest['title']}</h3>
+              <p>{dest['desc']}</p>
+              <button class="feature-cta" onclick="document.getElementById('world-target')?.scrollIntoView({{behavior:'smooth'}})">Enter {dest['title'].split()[0]}</button>
+            </div>
+            ''', unsafe_allow_html=True)
+            if st.button(f"Go {dest['title'].split()[0]}", key=f"land_{dest['loc']}", use_container_width=True):
+                enter_game(dest['loc'])
+                st.rerun()
+
+    st.markdown('''
+    <section id="characters-target" style="max-width:1200px;margin:3rem auto 0;padding:2rem 0">
+      <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.9);margin-bottom:1rem">Characters</p>
+      <h2 style="font-family:'Inter Tight',sans-serif;font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;color:#F5ECD7;margin-bottom:2rem">Meet the villagers</h2>
+    </section>
+    ''', unsafe_allow_html=True)
+    
+    cols = st.columns(3)
+    for i, key in enumerate(["golem", "librarian", "villager"]):
+        c = CHARACTERS[key]
+        avatar_url = get_avatar_url(c['name'].split()[0].lower(), 120)
+        with cols[i]:
+            st.markdown(f'''
+            <div class="character-card">
+              <div class="character-avatar"><img src="{avatar_url}" alt="{c['name']} avatar" /></div>
+              <div class="character-body">
+                <span style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,236,215,0.42);margin-bottom:0.65rem">{c['rarity']}</span>
+                <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.3rem;color:var(--gold);margin:0 0 0.45rem">{c['name']}</h3>
+                <p style="font-size:0.9rem;color:rgba(245,236,215,0.72);line-height:1.7;margin-bottom:1rem">{c['description']}</p>
+                <div style="font-size:0.85rem;color:rgba(245,236,215,0.55);">Trust {c['trust']}%</div>
+              </div>
+            </div>
+            ''', unsafe_allow_html=True)
+
+    st.markdown('''
+    <div style="text-align:center;padding:3rem 1rem">
+      <p style="font-size:0.75rem;letter-spacing:0.08em;color:rgba(245,236,215,0.35)">Designed & Developed by Gaurav Suthar</p>
+    </div>

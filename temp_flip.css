@@ -1,0 +1,16 @@
+
+.hero-scene{
+perspective:1200px;
+}
+
+.hero-scene-card{
+animation:trustFloat 6s ease-in-out infinite;
+transform-style:preserve-3d;
+transition:transform .7s cubic-bezier(.2,.8,.2,1);
+cursor:pointer;
+}
+
+.hero-scene-card:hover{
+transform:rotateY(12deg) rotateX(4deg) translateY(-8px);
+}
+

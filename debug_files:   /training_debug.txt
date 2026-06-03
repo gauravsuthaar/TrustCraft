@@ -1,0 +1,144 @@
+def render_training():
+    if st.button("Back", key="back_training"):
+        st.session_state.location = "village_square"
+        st.rerun()
+
+    start_training_session()
+
+    idx = st.session_state.question_index
+    order = st.session_state.question_order
+    total = len(order)
+
+    inner = """
+    <p class="world-title">⚔️ Training Simulator</p>
+    <p class="location-sub">Analyze evidence. Make decisions. Build trust.</p>
+    """
+
+    st.markdown(
+        cinematic_scene("grade-training", inner, "min(34vh,340px)"),
+        unsafe_allow_html=True
+    )
+
+    if idx >= total:
+        st.success("Training Complete")
+        return
+
+    q = QUESTIONS[order[idx]]
+    ch = CHARACTERS[q["character"]]
+
+    st.markdown(f"""
+    <div style="
+    max-width:1100px;
+    margin:2rem auto;
+    padding:2.5rem;
+    border-radius:32px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(30px);
+    ">
+        <div style="display:flex;justify-content:space-between;">
+            <span style="color:#E8C97D;">Scenario Analysis</span>
+            <span style="color:#E8C97D;">{idx+1}/{total}</span>
+        </div>
+
+        <h2 style="color:#F5ECD7;margin-top:1rem;">
+            {ch['emoji']} {ch['name']}
+        </h2>
+
+        <p style="color:rgba(245,236,215,.55);text-transform:uppercase;">
+            {q['category']}
+        </p>
+
+        <p style="color:rgba(245,236,215,.88);line-height:1.8;font-size:1.05rem;">
+            {q['statement']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    c1,c2,c3 = st.columns(3)
+
+    with c1:
+        trust = st.button("Trust", use_container_width=True)
+
+    with c2:
+        verify = st.button("Verify", use_container_width=True)
+
+    with c3:
+        reject = st.button("Reject", use_container_width=True)
+
+    choice = None
+
+    if trust:
+        choice = "trust"
+    elif verify:
+        choice = "verify"
+    elif reject:
+        choice = "reject"
+
+    if choice:
+
+        correct = q["correct"] == choice
+
+        st.markdown(
+            f"""
+            <div style="
+            max-width:1100px;
+            margin:1.5rem auto;
+            padding:2rem;
+            border-radius:24px;
+            background:rgba(255,255,255,.04);
+            border:1px solid rgba(255,255,255,.08);
+            ">
+                <h3 style="color:#F5ECD7;">
+                {"Correct Analysis" if correct else "Review Needed"}
+                </h3>
+
+                <p style="color:rgba(245,236,215,.82);line-height:1.8;">
+                {q["explanation"]}
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        if st.button("Next Scenario", use_container_width=True):
+            st.session_state.question_index += 1
+            st.rerun()
+        <div style="
+        max-width:1100px;
+        margin:1.5rem auto;
+        padding:2rem;
+        border-radius:28px;
+        background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.08);
+        ">
+        <h3 style="color:#F5ECD7;">
+        {'Correct Analysis' if fb['correct'] else 'Review Needed'}
+        </h3>
+
+        <p style="
+        color:rgba(245,236,215,.8);
+        line-height:1.8;">
+        {fb['explanation']}
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("Next Scenario", use_container_width=True):
+            st.session_state.question_index += 1
+            st.session_state.show_feedback = False
+            st.session_state.last_feedback = None
+            st.rerun()
+    if not castle_unlocked():
+        inner = f"""
+        <p class="world-title">👑 Results Dashboard</p>
+        <p class="location-sub">Gates sealed. Earn 180 XP and complete 5 training rounds.</p>
+        """
+        st.markdown(cinematic_scene("grade-castle", inner, "min(40vh,400px)"), unsafe_allow_html=True)
+        
+        xp = st.session_state.get("knowledge_xp", 0)
+        q_answered = st.session_state.get("questions_answered", 0)
+        st.markdown(f'''
+        <div style="max-width:720px;margin:2rem auto;padding:1.5rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px">
+          <p style="color:rgba(245,236,215,0.7);margin:0">Progress: {xp} / 180 XP · {q_answered} / 5 training rounds</p>
+        </div>

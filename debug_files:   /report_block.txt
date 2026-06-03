@@ -1,0 +1,47 @@
+    if st.session_state.forest_stage == "report":
+
+        total = len(HALLUCINATION_SCENARIOS)
+        score = st.session_state.forest_score
+        pct = round(score / total * 100)
+
+        rank = (
+            "Truth Guardian" if pct >= 90 else
+            "Sharp Verifier" if pct >= 75 else
+            "Careful Thinker" if pct >= 60 else
+            "Needs Verification Training"
+        )
+
+        st.title("🌲 Hallucination Intelligence Dashboard")
+        st.subheader(f"{pct}% Detection Accuracy")
+
+        st.progress(pct / 100)
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric("Correct", score)
+
+        with col2:
+            st.metric("Missed", total - score)
+
+        with col3:
+            st.metric("Rank", rank)
+
+        st.info(f"XP Score: {score}/{total}")
+
+        if pct >= 90:
+            st.success("Outstanding hallucination detection ability.")
+        elif pct >= 75:
+            st.success("Strong verification skills.")
+        elif pct >= 60:
+            st.warning("Good foundation. Keep practicing.")
+        else:
+            st.error("Needs more verification training.")
+
+        if st.button("Play Again", use_container_width=True):
+            st.session_state.forest_stage = "intro"
+            st.session_state.forest_score = 0
+            st.session_state.forest_question = 0
+            st.session_state.forest_feedback = None
+            st.session_state.forest_answers = []
+            st.rerun()

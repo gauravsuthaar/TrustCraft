@@ -1,0 +1,87 @@
+def render_training():
+    if st.button("Back", key="back_training"):
+        st.session_state.location = "village_square"
+        st.rerun()
+
+    start_training_session()
+
+    idx = st.session_state.question_index
+    order = st.session_state.question_order
+    total = len(order)
+
+    inner = """
+    <p class="world-title">⚔️ Training Simulator</p>
+    <p class="location-sub">Make decisions under uncertainty.</p>
+    """
+
+    st.markdown(cinematic_scene("grade-training", inner, "min(34vh,340px)"), unsafe_allow_html=True)
+
+    if idx >= total:
+        st.success("Training Complete")
+        return
+
+    q = QUESTIONS[order[idx]]
+    ch = CHARACTERS[q["character"]]
+
+    st.markdown(f"""
+    <div style="
+    max-width:1100px;
+    margin:2rem auto;
+    padding:2.5rem;
+    border-radius:32px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(30px);
+    ">
+        <div style="display:flex;justify-content:space-between;">
+            <span style="color:#E8C97D;">Scenario {idx+1}/{total}</span>
+        </div>
+
+        <h2 style="color:#F5ECD7;">
+            {ch['emoji']} {ch['name']}
+        </h2>
+
+        <p style="color:rgba(245,236,215,.85);line-height:1.7;">
+            {q['statement']}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    c1,c2,c3 = st.columns(3)
+
+    with c1:
+        trust = st.button("Trust")
+
+    with c2:
+        verify = st.button("Verify")
+
+    with c3:
+        reject = st.button("Reject")
+
+    choice = "trust" if trust else "verify" if verify else "reject" if reject else None
+
+    if choice:
+        correct = q["correct"] == choice
+
+        st.markdown(f"""
+        <div style="
+        max-width:1100px;
+        margin:1.5rem auto;
+        padding:2rem;
+        border-radius:24px;
+        background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.08);
+        ">
+        <h3 style="color:#F5ECD7;">
+        {"Correct" if correct else "Incorrect"}
+        </h3>
+
+        <p style="color:rgba(245,236,215,.8);">
+        {q["explanation"]}
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.button("Next"):
+            st.session_state.question_index += 1
+            st.rerun()

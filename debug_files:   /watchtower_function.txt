@@ -1,0 +1,99 @@
+def render_watchtower():
+    """Confidence Calibration"""
+
+    if st.button("Back", key="back_watchtower"):
+        st.session_state.location = "village_square"
+        st.rerun()
+
+    inner = """
+    <p class="world-title">🏰 Confidence Calibration</p>
+    <p class="location-sub">Confidence doesn't always mean correctness. Learn to calibrate.</p>
+    """
+
+    st.markdown(
+        cinematic_scene("grade-tower", inner, "min(42vh,420px)"),
+        unsafe_allow_html=True,
+    )
+
+    score = st.session_state.get("trust_score", 50)
+
+    st.markdown(f"""
+    <div style="
+    max-width:1150px;
+    margin:2rem auto;
+    padding:3rem;
+    border-radius:36px;
+    background:
+    radial-gradient(circle at top left, rgba(232,201,125,.18), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(232,201,125,.12), transparent 35%),
+    rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.10);
+    backdrop-filter:blur(40px);
+    -webkit-backdrop-filter:blur(40px);
+    box-shadow:0 40px 120px rgba(0,0,0,.45);
+    ">
+
+    <div style="
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#E8C97D;
+    font-size:.8rem;
+    ">
+    Calibration Analytics
+    </div>
+
+    <h1 style="
+    font-size:5rem;
+    color:#F5ECD7;
+    margin:.5rem 0;
+    ">
+    {score}%
+    </h1>
+
+    <p style="
+    color:rgba(245,236,215,.75);
+    font-size:1.1rem;
+    ">
+    Confidence Alignment Score
+    </p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.markdown("""
+        <div class="glass-card">
+        <h3>🎯 Evidence First</h3>
+        <p>Strong decisions come from evidence not certainty.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c2:
+        st.markdown("""
+        <div class="glass-card">
+        <h3>📈 Decision Quality</h3>
+        <p>Good analysts update beliefs when new facts appear.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c3:
+        st.markdown("""
+        <div class="glass-card">
+        <h3>⚖️ Calibration</h3>
+        <p>Match confidence to reality instead of intuition.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="glass-card" style="margin-top:1.5rem;">
+    <h2>🧠 Calibration Principle</h2>
+    <p>
+    The best decision makers are not the most confident.
+    They are the most accurate at estimating uncertainty and adjusting confidence when evidence changes.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    render_mentor_panel("golem")

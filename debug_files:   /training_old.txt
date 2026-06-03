@@ -1,0 +1,125 @@
+def render_training():
+    """Training Simulator - live scenarios."""
+    if st.button("Back", key="back_training"):
+        st.session_state.location = "village_square"
+        st.rerun()
+    
+    start_training_session()
+    idx = st.session_state.question_index
+    order = st.session_state.question_order
+    total = len(order) if order else 0
+
+    inner = f"""
+    <p class="world-title">⚔️ Training Simulator</p>
+    <p class="location-sub">Live encounters. Make real choices.</p>
+    """
+    st.markdown(cinematic_scene("grade-training", inner, "min(32vh,320px)"), unsafe_allow_html=True)
+
+    if total:
+        progress_text = f"Question {idx + 1} of {total}"
+        st.markdown(f'<p style="text-align:center;color:rgba(245,236,215,0.6);margin-bottom:1.5rem">{progress_text}</p>', unsafe_allow_html=True)
+
+    st.markdown('''
+    <div style="max-width:1200px;margin:2rem auto;padding:0 1rem">
+      <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.8);margin-bottom:1rem">Complexity Model</p>
+      <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.3rem;color:#F5ECD7;margin-bottom:0.75rem">How well is the model trained?</h3>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    complexity = st.slider("Training complexity", 1, 10, 5, key="ml_complexity")
+    if complexity >= 9:
+        sim_msg = "Overfitting - memorizes noise instead of learning real patterns."
+    elif complexity <= 2:
+        sim_msg = "Underfitting - too simple to capture real patterns."
+    else:
+        sim_msg = "Balanced - learns patterns without memorizing noise."
+    st.markdown(f'<div class="tc-flash tc-flash-info">{sim_msg}</div>', unsafe_allow_html=True)
+
+    if idx >= total and total > 0:
+        st.session_state.questions_answered = len(st.session_state.answers)
+        compute_scores()
+        st.markdown('''
+        <div style="max-width:720px;margin:2rem auto;padding:2rem;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px">
+          <p style="font-size:1.2rem;color:#E8C97D;margin-bottom:0.5rem">Training Complete</p>
+          <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.5rem;color:#F5ECD7;margin-bottom:1.5rem">The village honors your judgment</h3>
+          <p style="color:rgba(245,236,215,0.7);margin-bottom:0">Reach 180 XP total to unlock Results Dashboard</p>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            if st.button("New training", key="train_again"):
+                st.session_state.question_order = []
+                st.session_state.question_index = 0
+                st.session_state.answers = []
+                st.session_state.show_feedback = False
+                st.rerun()
+        with c2:
+            if castle_unlocked() and st.button("Results Dashboard", key="train_castle"):
+                st.session_state.location = "castle"
+                st.rerun()
+        with c3:
+            if st.button("Village Square", key="train_back"):
+                st.session_state.location = "village_square"
+                st.rerun()
+        return
+
+    q = QUESTIONS[order[idx]]
+    ch = CHARACTERS[q["character"]]
+
+    st.markdown(f'''
+    <div style="max-width:720px;margin:2rem auto;padding:2rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px">
+      <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:flex-start">
+        <div style="font-size:2.5rem">{ch['emoji']}</div>
+        <div>
+          <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.2rem;color:var(--gold);margin:0 0 0.25rem">{ch['name']}</h3>
+          <p style="font-size:0.8rem;color:rgba(245,236,215,0.5);margin:0;letter-spacing:0.08em;text-transform:uppercase">{q['category']}</p>
+        </div>
+      </div>
+      <p style="font-size:1.05rem;line-height:1.7;color:rgba(245,236,215,0.85);margin:0">{q['statement']}</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    if st.session_state.show_feedback and st.session_state.last_feedback:
+        fb = st.session_state.last_feedback
+        status = "Correct" if fb["correct"] else "Not quite"
+        st.markdown(f'''
+        <div style="max-width:720px;margin:1.5rem auto;padding:1.5rem;background:{'rgba(45,74,45,0.5)' if fb['correct'] else 'rgba(60,28,28,0.45)'};border:1px solid {'rgba(106,176,76,0.5)' if fb['correct'] else 'rgba(201,74,74,0.45)'};border-radius:12px">
+          <p style="color:{'#b8e0a8' if fb['correct'] else '#f0b0b0'};font-weight:600;margin:0 0 0.75rem">{status}</p>
+          <p style="color:rgba(245,236,215,0.8);line-height:1.6;margin:0">{fb['explanation']}</p>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        if st.button("Next question", key="train_continue", use_container_width=True):
+            st.session_state.show_feedback = False
+            st.session_state.question_index += 1
+            st.session_state.last_feedback = None
+            st.rerun()
+    else:
+        st.markdown('''
+        <div style="max-width:1200px;margin:2rem auto 1.5rem;padding:0 1rem">
+          <p style="font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(232,201,125,0.8)">Your judgment</p>
+          <p style="font-size:0.95rem;color:rgba(245,236,215,0.7)">Trust = accept it | Verify = check sources | Reject = call it out</p>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        c1, c2, c3 = st.columns(3)
+        for col, action, label in zip(
+            [c1, c2, c3],
+            ["trust", "verify", "reject"],
+            ["Trust", "Verify", "Reject"],
+        ):
+            with col:
+                if st.button(label, key=f"choice_{idx}_{action}", use_container_width=True):
+                    correct = q["correct"] == action
+                    record_decision(
+                        action, correct, q["correct"], q["hallucination"], q["explanation"], 15
+                    )
+                    st.session_state.last_feedback = {
+                        "correct": correct,
+                        "explanation": q["explanation"],
+                    }
+                    st.session_state.show_feedback = True
+                    st.rerun()
+
+

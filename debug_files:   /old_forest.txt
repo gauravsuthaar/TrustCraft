@@ -1,0 +1,71 @@
+def render_forest():
+    """Hallucination Detection - misinformation detection."""
+    if st.button("Back", key="back_forest"):
+        st.session_state.location = "village_square"
+        st.rerun()
+    
+    lesson_idx = st.session_state.forest_lesson % len(HALLUCINATION_LESSONS)
+    lesson = HALLUCINATION_LESSONS[lesson_idx]
+    
+    inner = f"""
+    <p class="world-title">🌲 Hallucination Detection</p>
+    <p class="location-sub">Learn how to identify AI generated misinformation and misleading answers.</p>
+    """
+    st.markdown(cinematic_scene("grade-forest", inner, "min(38vh,380px)"), unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div style="max-width:1200px;margin:2rem auto;padding:0 1rem">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">{lesson['icon']}</div>
+        <p style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(232,201,125,0.8);margin-bottom:0.5rem">Lesson {lesson_idx + 1} of {len(HALLUCINATION_LESSONS)}</p>
+        <h3 style="font-family:'Inter Tight',sans-serif;font-size:1.5rem;color:#F5ECD7;margin-bottom:1rem">{lesson['title']}</h3>
+        <p style="font-size:1.05rem;line-height:1.7;color:rgba(245,236,215,0.8)">{lesson['text']}</p>
+      </div>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("Previous lesson", key="forest_prev_intro"):
+            st.session_state.forest_lesson = max(0, st.session_state.forest_lesson - 1)
+            st.rerun()
+    with c2:
+        if st.button("Next lesson", key="forest_next_intro"):
+            st.session_state.forest_lesson = st.session_state.forest_lesson + 1
+            st.rerun()
+    
+    st.markdown("---")
+    
+    scenario = HALLUCINATION_SCENARIOS[
+        lesson_idx % len(HALLUCINATION_SCENARIOS)
+    ]
+
+    render_interactive_lesson(
+        "Hallucination Challenge",
+        scenario["question"],
+        scenario["response"],
+        "What would you do?",
+        ["Trust", "Verify", "Reject"],
+        scenario["correct"],
+        scenario["feedback"],
+        18,
+    )
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        if st.button("Previous lesson", key="forest_prev"):
+            st.session_state.forest_lesson = (lesson_idx - 1) % len(HALLUCINATION_LESSONS)
+            st.rerun()
+    with c2:
+        if st.button("Next lesson", key="forest_next"):
+            st.session_state.forest_lesson = (lesson_idx + 1) % len(HALLUCINATION_LESSONS)
+            st.rerun()
+    with c3:
+        if st.button("Training Simulator", key="forest_train"):
+            st.session_state.location = "training"
+            st.rerun()
+    if st.button("Village Square", key="forest_back"):
+        st.session_state.location = "village_square"
+        st.rerun()
+
+
