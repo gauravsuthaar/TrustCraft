@@ -1,5 +1,5 @@
 {
-  "knowledge_xp": 583,
+  "knowledge_xp": 643,
   "trust_score": 0,
   "reputation": 0,
   "achievements": [
@@ -25,26 +25,76 @@
     "forest_path",
     "forest_path"
   ],
-  "questions_answered": 0,
+  "questions_answered": 8,
   "visited_locs": [
-    "library"
+    "training",
+    "watchtower"
   ],
-  "answers": [],
+  "answers": [
+    {
+      "choice": "reject",
+      "correct": true,
+      "correct_action": "reject",
+      "hallucination": true
+    },
+    {
+      "choice": "reject",
+      "correct": true,
+      "correct_action": "reject",
+      "hallucination": true
+    },
+    {
+      "choice": "verify",
+      "correct": false,
+      "correct_action": "reject",
+      "hallucination": true
+    },
+    {
+      "choice": "trust",
+      "correct": true,
+      "correct_action": "trust",
+      "hallucination": false
+    },
+    {
+      "choice": "trust",
+      "correct": true,
+      "correct_action": "trust",
+      "hallucination": false
+    },
+    {
+      "choice": "verify",
+      "correct": false,
+      "correct_action": "trust",
+      "hallucination": false
+    },
+    {
+      "choice": "trust",
+      "correct": false,
+      "correct_action": "verify",
+      "hallucination": false
+    },
+    {
+      "choice": "verify",
+      "correct": false,
+      "correct_action": "reject",
+      "hallucination": true
+    }
+  ],
   "scores": {
-    "literacy": 0,
-    "trust": 0,
+    "literacy": 50,
+    "trust": 66,
     "verification": 0,
-    "hallucination": 0,
-    "critical": 0
+    "hallucination": 50,
+    "critical": 50
   },
   "forest_penalty": 195,
-  "hallucinations_rejected": 2,
+  "hallucinations_rejected": 4,
   "calibration_done": false,
   "audio_on": true,
   "cm_history": {
-    "tp": 3,
-    "fp": 3,
+    "tp": 5,
+    "fp": 4,
     "fn": 4,
-    "tn": 4
+    "tn": 6
   }
 }
